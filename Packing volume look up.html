@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canopy Container Compatibility Lookup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Input Mono', 'Courier New', monospace;
+            background: #181818;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #181818;
+            border-radius: 12px;
+            border: 3px solid #DBFF00;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #181818;
+            color: #DBFF00;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 3px solid #DBFF00;
+        }
+
+        .header h1 {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px 30px;
+            font-size: 1em;
+            border: 3px solid #DBFF00;
+            background: #181818;
+            color: #DBFF00;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mode-btn:hover {
+            background: #DBFF00;
+            color: #181818;
+        }
+
+        .mode-btn.active {
+            background: #DBFF00;
+            color: #181818;
+        }
+
+        .lookup-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lookup-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #FFFFFF;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #DBFF00;
+            border-radius: 6px;
+            background: #181818;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Input Mono', 'Courier New', monospace;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #DBFF00;
+            box-shadow: 0 0 10px rgba(219, 255, 0, 0.3);
+        }
+
+        select:disabled {
+            background: #2a2a2a;
+            cursor: not-allowed;
+            opacity: 0.5;
+            border-color: #444;
+        }
+
+        select option {
+            background: #181818;
+            color: #FFFFFF;
+        }
+
+        .results {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results h3 {
+            margin-bottom: 20px;
+            color: #DBFF00;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fit-section {
+            margin-bottom: 30px;
+        }
+
+        .fit-section h4 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #DBFF00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fit-section h5 {
+            font-size: 0.9em;
+            margin: 20px 0 10px 0;
+            color: #FFFFFF;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .compatibility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .compatibility-item {
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95em;
+            transition: transform 0.2s ease;
+            border: 2px solid;
+        }
+
+        .compatibility-item:hover {
+            transform: scale(1.05);
+        }
+
+        .compatible-tight {
+            background: #FF40B4;
+            border-color: #FF40B4;
+            color: #181818;
+        }
+
+        .compatible-comfortable {
+            background: #DBFF00;
+            border-color: #DBFF00;
+            color: #181818;
+        }
+
+        .compatible-loose {
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #181818;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border: 2px solid #DBFF00;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-box {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 2px solid;
+            font-weight: 700;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #FFFFFF;
+            font-size: 1.1em;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border: 2px solid #DBFF00;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .mode-btn {
+                min-width: 100%;
+            }
+
+            .compatibility-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CANOPY CONTAINER LOOKUP</h1>
+            <p>Find the perfect fit for your equipment</p>
+        </div>
+
+        <div class="content">
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="switchMode('canopy')">
+                    I have a canopy<br>Find containers
+                </button>
+                <button class="mode-btn" onclick="switchMode('container')">
+                    I have a container<br>Find canopy sizes
+                </button>
+            </div>
+
+            <!-- Canopy to Container Mode -->
+            <div id="canopy-mode" class="lookup-section active">
+                <div class="form-group">
+                    <label for="canopy-type">Canopy Type:</label>
+                    <select id="canopy-type" onchange="updateCanopySizes()">
+                        <option value="">Select canopy type...</option>
+                        <option value="helium">Helium</option>
+                        <option value="kraken_low_bulk">Kraken Low Bulk</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="canopy-size">Canopy Size:</label>
+                    <select id="canopy-size" onchange="updateContainerBrands()" disabled>
+                        <option value="">Select canopy size...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="container-brand">Container Brand:</label>
+                    <select id="container-brand" onchange="findContainers()" disabled>
+                        <option value="">Select container brand...</option>
+                    </select>
+                </div>
+
+                <div id="canopy-results" class="results">
+                    <h3>Compatible Containers:</h3>
+                    <div id="canopy-results-content"></div>
+                </div>
+            </div>
+
+            <!-- Container to Canopy Mode -->
+            <div id="container-mode" class="lookup-section">
+                <div class="form-group">
+                    <label for="container-type">Container Type:</label>
+                    <select id="container-type" onchange="updateContainerSizes()">
+                        <option value="">Select container type...</option>
+                        <option value="upt">UPT Vector</option>
+                        <option value="sunpath">Sunpath Javelin</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="container-size">Container Size:</label>
+                    <select id="container-size" onchange="updateCanopyTypesForContainer()" disabled>
+                        <option value="">Select container size...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="canopy-type-container">Canopy Type:</label>
+                    <select id="canopy-type-container" onchange="findCanopySizes()" disabled>
+                        <option value="">Select canopy type...</option>
+                        <option value="helium">Helium</option>
+                        <option value="kraken_low_bulk">Kraken Low Bulk</option>
+                    </select>
+                </div>
+
+                <div id="container-results" class="results">
+                    <h3>Compatible Canopy Sizes:</h3>
+                    <div id="container-results-content"></div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-box compatible-tight">Tight fit</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box compatible-comfortable">Comfortable fit</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box compatible-loose">Loose fit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const compatibilityData = {
+            helium: {
+                upt: {
+                    129: { 
+                        tight: ["V304", "V316", "V335", "V305-1", "V318", "V314-1", "V336"],
+                        comfortable: ["V306", "V319", "V307", "V326", "V339", "V316-1", "V308", "V340"],
+                        loose: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310"]
+                    },
+                    139: {
+                        tight: ["V336", "V306", "V319", "V307", "V326", "V339", "V316-1"],
+                        comfortable: ["V308", "V340", "V319-1", "V343", "V320", "V344", "V328", "V347"],
+                        loose: ["V309", "V310", "V349", "V352", "V348", "V351"]
+                    },
+                    149: {
+                        tight: ["V326", "V339", "V316-1", "V308", "V340"],
+                        comfortable: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310", "V349", "V352"],
+                        loose: ["V348", "V351", "V350", "V354"]
+                    },
+                    159: {
+                        tight: ["V308", "V340", "V319-1", "V343", "V320"],
+                        comfortable: ["V344", "V328", "V347", "V309", "V310", "V349", "V352", "V348", "V351"],
+                        loose: ["V350", "V354", "V353", "V357"]
+                    },
+                    169: {
+                        tight: ["V319-1", "V343", "V320", "V344", "V328"],
+                        comfortable: ["V347", "V309", "V310", "V349", "V352", "V348", "V351", "V350"],
+                        loose: ["V354", "V353", "V357", "V346", "V389"]
+                    },
+                    189: {
+                        tight: ["V347", "V309", "V310", "V349", "V352", "V348", "V351"],
+                        comfortable: ["V350", "V354", "V353", "V357", "V346"],
+                        loose: ["V389", "V355", "V346-1", "V358", "V390", "V364", "V380"]
+                    },
+                    209: {
+                        tight: ["V350", "V354"],
+                        comfortable: ["V353", "V357", "V346", "V389", "V355", "V346-1", "V358", "V390"],
+                        loose: ["V364", "V380", "V360", "V392"]
+                    },
+                    229: {
+                        tight: ["V354", "V353", "V357", "V346"],
+                        comfortable: ["V389", "V355", "V346-1", "V358", "V390", "V364", "V380", "V360", "V392"],
+                        loose: ["V360-1", "V375", "V364-1", "V382"]
+                    }
+                },
+                sunpath: {
+                    129: {
+                        tight: ["RSK.5"],
+                        comfortable: ["RSK-1", "NJK", "DNKY", "OJK"],
+                        loose: ["TJNK"]
+                    },
+                    139: {
+                        tight: ["RSK.5", "RSK-1"],
+                        comfortable: ["NJK", "DNKY", "OJK", "TJNK"],
+                        loose: ["J1KS", "J2K", "TJNK.5", "J1KL", "J3K"]
+                    },
+                    149: {
+                        tight: ["RSK-1", "NJK", "DNKY"],
+                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
+                        loose: ["J1KL", "J3K"]
+                    },
+                    159: {
+                        tight: ["NJK", "DNKY"],
+                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
+                        loose: ["J1KL", "J3K"]
+                    },
+                    169: {
+                        tight: ["OJK"],
+                        comfortable: ["TJNK", "J1KS", "J2K", "TJNK.5", "J1KL", "J3K"],
+                        loose: ["J4K"]
+                    },
+                    189: {
+                        tight: ["J1KS", "J2K", "TJNK.5"],
+                        comfortable: ["J1KL", "J3K", "J4K"],
+                        loose: ["J4.5K"]
+                    },
+                    209: {
+                        tight: ["J1KL", "J3K"],
+                        comfortable: ["J4K"],
+                        loose: ["J4.5K"]
+                    },
+                    229: {
+                        tight: ["J4K"],
+                        comfortable: ["J4.5K"],
+                        loose: ["J5K"]
+                    }
+                }
+            },
+            kraken_low_bulk: {
+                upt: {
+                    119: {
+                        tight: ["V303", "V305", "V317", "V304"],
+                        comfortable: ["V316", "V335", "V305-1", "V318", "V314-1", "V336", "V306", "V319", "V307"],
+                        loose: ["V326", "V339", "V316-1", "V308", "V340", "V319-1"]
+                    },
+                    129: {
+                        tight: ["V304", "V316", "V335", "V305-1", "V318", "V314-1", "V336"],
+                        comfortable: ["V306", "V319", "V307", "V326", "V339", "V316-1", "V308", "V340"],
+                        loose: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310"]
+                    },
+                    139: {
+                        tight: ["V336", "V306", "V319", "V307", "V326", "V339", "V316-1"],
+                        comfortable: ["V308", "V340", "V319-1", "V343", "V320", "V344", "V328", "V347"],
+                        loose: ["V309", "V310", "V349", "V352", "V348", "V351"]
+                    },
+                    149: {
+                        tight: ["V326", "V339", "V316-1", "V308", "V340"],
+                        comfortable: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310", "V349", "V352"],
+                        loose: ["V348", "V351", "V350", "V354"]
+                    },
+                    159: {
+                        tight: ["V308", "V340", "V319-1", "V343", "V320"],
+                        comfortable: ["V344", "V328", "V347", "V309", "V310", "V349", "V352", "V348", "V351"],
+                        loose: ["V350", "V354", "V353", "V357"]
+                    },
+                    169: {
+                        tight: ["V319-1", "V343", "V320", "V344", "V328"],
+                        comfortable: ["V347", "V309", "V310", "V349", "V352", "V348", "V351", "V350"],
+                        loose: ["V354", "V353", "V357", "V346", "V389"]
+                    },
+                    189: {
+                        tight: ["V347", "V309", "V310", "V349", "V352", "V348", "V351"],
+                        comfortable: ["V350", "V354", "V353", "V357", "V346"],
+                        loose: ["V389", "V355", "V346-1", "V358", "V390", "V364", "V380"]
+                    }
+                },
+                sunpath: {
+                    119: {
+                        tight: ["RSK.5"],
+                        comfortable: ["RSK-1", "NJK", "DNKY"],
+                        loose: ["OJK"]
+                    },
+                    129: {
+                        tight: ["RSK.5"],
+                        comfortable: ["RSK-1", "NJK", "DNKY", "OJK"],
+                        loose: ["TJNK"]
+                    },
+                    139: {
+                        tight: ["RSK.5", "RSK-1"],
+                        comfortable: ["NJK", "DNKY", "OJK", "TJNK"],
+                        loose: ["J1KS", "J2K", "TJNK.5", "J1KL", "J3K"]
+                    },
+                    149: {
+                        tight: ["RSK-1", "NJK", "DNKY"],
+                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
+                        loose: ["J1KL", "J3K"]
+                    },
+                    159: {
+                        tight: ["NJK", "DNKY"],
+                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
+                        loose: ["J1KL", "J3K"]
+                    },
+                    169: {
+                        tight: ["OJK"],
+                        comfortable: ["TJNK", "J1KS", "J2K", "TJNK.5", "J1KL", "J3K"],
+                        loose: ["J4K"]
+                    },
+                    189: {
+                        tight: ["J1KS", "J2K", "TJNK.5"],
+                        comfortable: ["J1KL", "J3K", "J4K"],
+                        loose: ["J4.5K"]
+                    }
+                }
+            }
+        };
+
+        let currentMode = 'canopy';
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.lookup-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(mode + '-mode').classList.add('active');
+            
+            document.getElementById('canopy-results').classList.remove('show');
+            document.getElementById('container-results').classList.remove('show');
+        }
+
+        function updateCanopySizes() {
+            const canopyType = document.getElementById('canopy-type').value;
+            const canopySizeSelect = document.getElementById('canopy-size');
+            const containerBrandSelect = document.getElementById('container-brand');
+            
+            canopySizeSelect.innerHTML = '<option value="">Select canopy size...</option>';
+            containerBrandSelect.innerHTML = '<option value="">Select container brand...</option>';
+            containerBrandSelect.disabled = true;
+            document.getElementById('canopy-results').classList.remove('show');
+            
+            if (canopyType) {
+                canopySizeSelect.disabled = false;
+                
+                const sizes = new Set();
+                if (compatibilityData[canopyType].upt) {
+                    Object.keys(compatibilityData[canopyType].upt).forEach(size => sizes.add(size));
+                }
+                if (compatibilityData[canopyType].sunpath) {
+                    Object.keys(compatibilityData[canopyType].sunpath).forEach(size => sizes.add(size));
+                }
+                
+                Array.from(sizes).sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size;
+                    option.textContent = size;
+                    canopySizeSelect.appendChild(option);
+                });
+            } else {
+                canopySizeSelect.disabled = true;
+            }
+        }
+
+        function updateContainerBrands() {
+            const canopyType = document.getElementById('canopy-type').value;
+            const canopySize = document.getElementById('canopy-size').value;
+            const containerBrandSelect = document.getElementById('container-brand');
+            
+            containerBrandSelect.innerHTML = '<option value="">Select container brand...</option>';
+            document.getElementById('canopy-results').classList.remove('show');
+            
+            if (canopyType && canopySize) {
+                containerBrandSelect.disabled = false;
+                
+                const brands = [];
+                if (compatibilityData[canopyType].upt && compatibilityData[canopyType].upt[canopySize]) {
+                    brands.push({ value: 'upt', label: 'UPT Vector' });
+                }
+                if (compatibilityData[canopyType].sunpath && compatibilityData[canopyType].sunpath[canopySize]) {
+                    brands.push({ value: 'sunpath', label: 'Sunpath Javelin' });
+                }
+                
+                brands.forEach(brand => {
+                    const option = document.createElement('option');
+                    option.value = brand.value;
+                    option.textContent = brand.label;
+                    containerBrandSelect.appendChild(option);
+                });
+            } else {
+                containerBrandSelect.disabled = true;
+            }
+        }
+
+        function findContainers() {
+            const canopyType = document.getElementById('canopy-type').value;
+            const canopySize = document.getElementById('canopy-size').value;
+            const containerBrand = document.getElementById('container-brand').value;
+            const resultsDiv = document.getElementById('canopy-results');
+            const contentDiv = document.getElementById('canopy-results-content');
+            
+            if (!canopyType || !canopySize || !containerBrand) {
+                resultsDiv.classList.remove('show');
+                return;
+            }
+            
+            let html = '';
+            let hasResults = false;
+            
+            const data = compatibilityData[canopyType][containerBrand]?.[canopySize];
+            const brandName = containerBrand === 'upt' ? 'UPT Vector' : 'Sunpath Javelin';
+            
+            if (data && (data.tight.length > 0 || data.comfortable.length > 0 || data.loose.length > 0)) {
+                hasResults = true;
+                html += '<div class="fit-section">';
+                html += `<h4>${brandName}</h4>`;
+                
+                if (data.tight.length > 0) {
+                    html += '<h5>Tight Fit</h5>';
+                    html += '<div class="compatibility-grid">';
+                    data.tight.forEach(container => {
+                        html += `<div class="compatibility-item compatible-tight">${container}</div>`;
+                    });
+                    html += '</div>';
+                }
+                
+                if (data.comfortable.length > 0) {
+                    html += '<h5>Comfortable Fit</h5>';
+                    html += '<div class="compatibility-grid">';
+                    data.comfortable.forEach(container => {
+                        html += `<div class="compatibility-item compatible-comfortable">${container}</div>`;
+                    });
+                    html += '</div>';
+                }
+                
+                if (data.loose.length > 0) {
+                    html += '<h5>Loose Fit</h5>';
+                    html += '<div class="compatibility-grid">';
+                    data.loose.forEach(container => {
+                        html += `<div class="compatibility-item compatible-loose">${container}</div>`;
+                    });
+                    html += '</div>';
+                }
+                
+                html += '</div>';
+            }
+            
+            if (!hasResults) {
+                html = '<div class="no-results">No compatible containers found.</div>';
+            }
+            
+            contentDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+
+        function updateContainerSizes() {
+            const containerType = document.getElementById('container-type').value;
+            const containerSizeSelect = document.getElementById('container-size');
+            
+            containerSizeSelect.innerHTML = '<option value="">Select container size...</option>';
+            document.getElementById('canopy-type-container').disabled = true;
+            document.getElementById('canopy-type-container').value = '';
+            document.getElementById('container-results').classList.remove('show');
+            
+            if (containerType) {
+                containerSizeSelect.disabled = false;
+                
+                const containers = new Set();
+                
+                Object.keys(compatibilityData).forEach(canopyType => {
+                    if (compatibilityData[canopyType][containerType]) {
+                        Object.keys(compatibilityData[canopyType][containerType]).forEach(canopySize => {
+                            const data = compatibilityData[canopyType][containerType][canopySize];
+                            data.tight.forEach(c => containers.add(c));
+                            data.comfortable.forEach(c => containers.add(c));
+                            data.loose.forEach(c => containers.add(c));
+                        });
+                    }
+                });
+                
+                Array.from(containers).sort((a, b) => {
+                    const matchA = a.match(/^([A-Z]+)(.*)$/);
+                    const matchB = b.match(/^([A-Z]+)(.*)$/);
+                    if (matchA && matchB) {
+                        if (matchA[1] === matchB[1]) {
+                            return matchA[2].localeCompare(matchB[2], undefined, { numeric: true });
+                        }
+                        return matchA[1].localeCompare(matchB[1]);
+                    }
+                    return a.localeCompare(b);
+                }).forEach(container => {
+                    const option = document.createElement('option');
+                    option.value = container;
+                    option.textContent = container;
+                    containerSizeSelect.appendChild(option);
+                });
+            } else {
+                containerSizeSelect.disabled = true;
+            }
+        }
+
+        function updateCanopyTypesForContainer() {
+            const containerSize = document.getElementById('container-size').value;
+            const canopyTypeSelect = document.getElementById('canopy-type-container');
+            
+            if (containerSize) {
+                canopyTypeSelect.disabled = false;
+            } else {
+                canopyTypeSelect.disabled = true;
+                canopyTypeSelect.value = '';
+            }
+            
+            document.getElementById('container-results').classList.remove('show');
+        }
+
+        function findCanopySizes() {
+            const containerType = document.getElementById('container-type').value;
+            const containerSize = document.getElementById('container-size').value;
+            const canopyType = document.getElementById('canopy-type-container').value;
+            const resultsDiv = document.getElementById('container-results');
+            const contentDiv = document.getElementById('container-results-content');
+            
+            if (!containerType || !containerSize || !canopyType) {
+                resultsDiv.classList.remove('show');
+                return;
+            }
+            
+            const containerName = containerType === 'upt' ? 'UPT Vector' : 'Sunpath Javelin';
+            const canopyData = compatibilityData[canopyType][containerType];
+            
+            const canopyNames = {
+                'helium': 'Helium',
+                'kraken_low_bulk': 'Kraken Low Bulk'
+            };
+            const canopyDisplayName = canopyNames[canopyType] || canopyType;
+            
+            const tightSizes = [];
+            const comfortableSizes = [];
+            const looseSizes = [];
+            
+            Object.keys(canopyData).forEach(size => {
+                const data = canopyData[size];
+                if (data.tight.includes(containerSize)) {
+                    tightSizes.push(size);
+                }
+                if (data.comfortable.includes(containerSize)) {
+                    comfortableSizes.push(size);
+                }
+                if (data.loose.includes(containerSize)) {
+                    looseSizes.push(size);
+                }
+            });
+            
+            let html = '';
+            
+            if (tightSizes.length > 0 || comfortableSizes.length > 0 || looseSizes.length > 0) {
+                html += `<h4>${canopyDisplayName} sizes compatible with ${containerName} ${containerSize}:</h4>`;
+                
+                if (tightSizes.length > 0) {
+                    html += '<h5>Tight Fit</h5>';
+                    html += '<div class="compatibility-grid">';
+                    tightSizes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
+                        html += `<div class="compatibility-item compatible-tight">${size}</div>`;
+                    });
+                    html += '</div>';
+                }
+                
+                if (comfortableSizes.length > 0) {
+                    html += '<h5>Comfortable Fit</h5>';
+                    html += '<div class="compatibility-grid">';
+                    comfortableSizes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
+                        html += `<div class="compatibility-item compatible-comfortable">${size}</div>`;
+                    });
+                    html += '</div>';
+                }
+                
+                if (looseSizes.length > 0) {
+                    html += '<h5>Loose Fit</h5>';
+                    html += '<div class="compatibility-grid">';
+                    looseSizes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
+                        html += `<div class="compatibility-item compatible-loose">${size}</div>`;
+                    });
+                    html += '</div>';
+                }
+            } else {
+                html = `<div class="no-results">No compatible ${canopyDisplayName} sizes found for ${containerName} ${containerSize}.</div>`;
+            }
+            
+            contentDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+    </script>
+</body>
+</html>
