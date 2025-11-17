@@ -165,7 +165,7 @@
 
         .results h3 {
             margin-bottom: 20px;
-            color: #DBFF00;
+            color: #DBFF00 !important;
             font-size: 1.5em;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -178,7 +178,7 @@
         .fit-section h4 {
             font-size: 1.2em;
             margin-bottom: 15px;
-            color: #DBFF00;
+            color: #DBFF00 !important;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -186,7 +186,7 @@
         .fit-section h5 {
             font-size: 0.9em;
             margin: 20px 0 10px 0;
-            color: #FFFFFF;
+            color: #FFFFFF !important;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -238,9 +238,6 @@
             margin-top: 30px;
             flex-wrap: wrap;
             padding: 20px;
-            background: #2a2a2a;
-            border-radius: 8px;
-            border: 2px solid #DBFF00;
         }
 
         .legend-item {
@@ -251,7 +248,6 @@
         .legend-box {
             padding: 10px 20px;
             border-radius: 6px;
-            border: 2px solid;
             font-weight: 700;
             font-size: 0.95em;
             text-transform: uppercase;
@@ -310,8 +306,11 @@
                     <label for="canopy-type">Canopy Type:</label>
                     <select id="canopy-type" onchange="updateCanopySizes()">
                         <option value="">Select canopy type...</option>
-                        <option value="helium">Helium</option>
-                        <option value="kraken_low_bulk">Kraken Low Bulk</option>
+                        <option value="air">Air</option>
+                        <option value="jfx2">JFX2</option>
+                        <option value="leia">Leia</option>
+                        <option value="petra">Petra</option>
+                        <option value="safire3">Safire 3</option>
                     </select>
                 </div>
 
@@ -357,8 +356,11 @@
                     <label for="canopy-type-container">Canopy Type:</label>
                     <select id="canopy-type-container" onchange="findCanopySizes()" disabled>
                         <option value="">Select canopy type...</option>
-                        <option value="helium">Helium</option>
-                        <option value="kraken_low_bulk">Kraken Low Bulk</option>
+                        <option value="air">Air</option>
+                        <option value="jfx2">JFX2</option>
+                        <option value="leia">Leia</option>
+                        <option value="petra">Petra</option>
+                        <option value="safire3">Safire 3</option>
                     </select>
                 </div>
 
@@ -384,169 +386,1392 @@
 
     <script>
         const compatibilityData = {
-            helium: {
-                upt: {
-                    129: { 
-                        tight: ["V304", "V316", "V335", "V305-1", "V318", "V314-1", "V336"],
-                        comfortable: ["V306", "V319", "V307", "V326", "V339", "V316-1", "V308", "V340"],
-                        loose: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310"]
-                    },
-                    139: {
-                        tight: ["V336", "V306", "V319", "V307", "V326", "V339", "V316-1"],
-                        comfortable: ["V308", "V340", "V319-1", "V343", "V320", "V344", "V328", "V347"],
-                        loose: ["V309", "V310", "V349", "V352", "V348", "V351"]
-                    },
-                    149: {
-                        tight: ["V326", "V339", "V316-1", "V308", "V340"],
-                        comfortable: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310", "V349", "V352"],
-                        loose: ["V348", "V351", "V350", "V354"]
-                    },
-                    159: {
-                        tight: ["V308", "V340", "V319-1", "V343", "V320"],
-                        comfortable: ["V344", "V328", "V347", "V309", "V310", "V349", "V352", "V348", "V351"],
-                        loose: ["V350", "V354", "V353", "V357"]
-                    },
-                    169: {
-                        tight: ["V319-1", "V343", "V320", "V344", "V328"],
-                        comfortable: ["V347", "V309", "V310", "V349", "V352", "V348", "V351", "V350"],
-                        loose: ["V354", "V353", "V357", "V346", "V389"]
-                    },
-                    189: {
-                        tight: ["V347", "V309", "V310", "V349", "V352", "V348", "V351"],
-                        comfortable: ["V350", "V354", "V353", "V357", "V346"],
-                        loose: ["V389", "V355", "V346-1", "V358", "V390", "V364", "V380"]
-                    },
-                    209: {
-                        tight: ["V350", "V354"],
-                        comfortable: ["V353", "V357", "V346", "V389", "V355", "V346-1", "V358", "V390"],
-                        loose: ["V364", "V380", "V360", "V392"]
-                    },
-                    229: {
-                        tight: ["V354", "V353", "V357", "V346"],
-                        comfortable: ["V389", "V355", "V346-1", "V358", "V390", "V364", "V380", "V360", "V392"],
-                        loose: ["V360-1", "V375", "V364-1", "V382"]
-                    }
-                },
-                sunpath: {
-                    129: {
-                        tight: ["RSK.5"],
-                        comfortable: ["RSK-1", "NJK", "DNKY", "OJK"],
-                        loose: ["TJNK"]
-                    },
-                    139: {
-                        tight: ["RSK.5", "RSK-1"],
-                        comfortable: ["NJK", "DNKY", "OJK", "TJNK"],
-                        loose: ["J1KS", "J2K", "TJNK.5", "J1KL", "J3K"]
-                    },
-                    149: {
-                        tight: ["RSK-1", "NJK", "DNKY"],
-                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
-                        loose: ["J1KL", "J3K"]
-                    },
-                    159: {
-                        tight: ["NJK", "DNKY"],
-                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
-                        loose: ["J1KL", "J3K"]
-                    },
-                    169: {
-                        tight: ["OJK"],
-                        comfortable: ["TJNK", "J1KS", "J2K", "TJNK.5", "J1KL", "J3K"],
-                        loose: ["J4K"]
-                    },
-                    189: {
-                        tight: ["J1KS", "J2K", "TJNK.5"],
-                        comfortable: ["J1KL", "J3K", "J4K"],
-                        loose: ["J4.5K"]
-                    },
-                    209: {
-                        tight: ["J1KL", "J3K"],
-                        comfortable: ["J4K"],
-                        loose: ["J4.5K"]
-                    },
-                    229: {
-                        tight: ["J4K"],
-                        comfortable: ["J4.5K"],
-                        loose: ["J5K"]
-                    }
-                }
+            "jfx2": {
+                        "upt": {
+                                    "74": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317"
+                                                ],
+                                                "loose": [
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326"
+                                                ]
+                                    },
+                                    "79": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317",
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1"
+                                                ],
+                                                "loose": [
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1"
+                                                ]
+                                    },
+                                    "84": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317",
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307"
+                                                ],
+                                                "loose": [
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1"
+                                                ]
+                                    },
+                                    "89": {
+                                                "tight": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317"
+                                                ],
+                                                "comfortable": [
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1"
+                                                ],
+                                                "loose": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ]
+                                    },
+                                    "94": {
+                                                "tight": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317",
+                                                            "V304",
+                                                            "V316"
+                                                ],
+                                                "comfortable": [
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340"
+                                                ],
+                                                "loose": [
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347"
+                                                ]
+                                    },
+                                    "99": {
+                                                "tight": [
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1"
+                                                ],
+                                                "comfortable": [
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ],
+                                                "loose": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349"
+                                                ]
+                                    },
+                                    "104": {
+                                                "tight": [
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307"
+                                                ],
+                                                "comfortable": [
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ],
+                                                "loose": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ]
+                                    },
+                                    "109": {
+                                                "tight": [
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1"
+                                                ],
+                                                "comfortable": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310"
+                                                ],
+                                                "loose": [
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ]
+                                    },
+                                    "119": {
+                                                "tight": [
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340"
+                                                ],
+                                                "comfortable": [
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ],
+                                                "loose": [
+                                                            "V350",
+                                                            "V354",
+                                                            "V353"
+                                                ]
+                                    }
+                        },
+                        "sunpath": {
+                                    "74": {
+                                                "tight": [],
+                                                "comfortable": [],
+                                                "loose": [
+                                                            "Proposed",
+                                                            "RSK.5",
+                                                            "RSK-1"
+                                                ]
+                                    },
+                                    "79": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "loose": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK"
+                                                ]
+                                    },
+                                    "84": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "loose": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "89": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "RSK.5",
+                                                            "RSK-1",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "94": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "RSK.5",
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "OJK",
+                                                            "TJNK"
+                                                ]
+                                    },
+                                    "99": {
+                                                "tight": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "comfortable": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "104": {
+                                                "tight": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "comfortable": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed",
+                                                            "OJK"
+                                                ],
+                                                "loose": [
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ]
+                                    },
+                                    "109": {
+                                                "tight": [
+                                                            "RSK.5",
+                                                            "RSK-1",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed",
+                                                            "OJK",
+                                                            "TJNK"
+                                                ],
+                                                "loose": [
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5",
+                                                            "J1KL",
+                                                            "J3K"
+                                                ]
+                                    },
+                                    "119": {
+                                                "tight": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "loose": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    }
+                        }
             },
-            kraken_low_bulk: {
-                upt: {
-                    119: {
-                        tight: ["V303", "V305", "V317", "V304"],
-                        comfortable: ["V316", "V335", "V305-1", "V318", "V314-1", "V336", "V306", "V319", "V307"],
-                        loose: ["V326", "V339", "V316-1", "V308", "V340", "V319-1"]
-                    },
-                    129: {
-                        tight: ["V304", "V316", "V335", "V305-1", "V318", "V314-1", "V336"],
-                        comfortable: ["V306", "V319", "V307", "V326", "V339", "V316-1", "V308", "V340"],
-                        loose: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310"]
-                    },
-                    139: {
-                        tight: ["V336", "V306", "V319", "V307", "V326", "V339", "V316-1"],
-                        comfortable: ["V308", "V340", "V319-1", "V343", "V320", "V344", "V328", "V347"],
-                        loose: ["V309", "V310", "V349", "V352", "V348", "V351"]
-                    },
-                    149: {
-                        tight: ["V326", "V339", "V316-1", "V308", "V340"],
-                        comfortable: ["V319-1", "V343", "V320", "V344", "V328", "V347", "V309", "V310", "V349", "V352"],
-                        loose: ["V348", "V351", "V350", "V354"]
-                    },
-                    159: {
-                        tight: ["V308", "V340", "V319-1", "V343", "V320"],
-                        comfortable: ["V344", "V328", "V347", "V309", "V310", "V349", "V352", "V348", "V351"],
-                        loose: ["V350", "V354", "V353", "V357"]
-                    },
-                    169: {
-                        tight: ["V319-1", "V343", "V320", "V344", "V328"],
-                        comfortable: ["V347", "V309", "V310", "V349", "V352", "V348", "V351", "V350"],
-                        loose: ["V354", "V353", "V357", "V346", "V389"]
-                    },
-                    189: {
-                        tight: ["V347", "V309", "V310", "V349", "V352", "V348", "V351"],
-                        comfortable: ["V350", "V354", "V353", "V357", "V346"],
-                        loose: ["V389", "V355", "V346-1", "V358", "V390", "V364", "V380"]
-                    }
-                },
-                sunpath: {
-                    119: {
-                        tight: ["RSK.5"],
-                        comfortable: ["RSK-1", "NJK", "DNKY"],
-                        loose: ["OJK"]
-                    },
-                    129: {
-                        tight: ["RSK.5"],
-                        comfortable: ["RSK-1", "NJK", "DNKY", "OJK"],
-                        loose: ["TJNK"]
-                    },
-                    139: {
-                        tight: ["RSK.5", "RSK-1"],
-                        comfortable: ["NJK", "DNKY", "OJK", "TJNK"],
-                        loose: ["J1KS", "J2K", "TJNK.5", "J1KL", "J3K"]
-                    },
-                    149: {
-                        tight: ["RSK-1", "NJK", "DNKY"],
-                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
-                        loose: ["J1KL", "J3K"]
-                    },
-                    159: {
-                        tight: ["NJK", "DNKY"],
-                        comfortable: ["OJK", "TJNK", "J1KS", "J2K", "TJNK.5"],
-                        loose: ["J1KL", "J3K"]
-                    },
-                    169: {
-                        tight: ["OJK"],
-                        comfortable: ["TJNK", "J1KS", "J2K", "TJNK.5", "J1KL", "J3K"],
-                        loose: ["J4K"]
-                    },
-                    189: {
-                        tight: ["J1KS", "J2K", "TJNK.5"],
-                        comfortable: ["J1KL", "J3K", "J4K"],
-                        loose: ["J4.5K"]
-                    }
-                }
+            "leia": {
+                        "upt": {
+                                    "69": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317",
+                                                            "V304",
+                                                            "V316"
+                                                ],
+                                                "loose": [
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339"
+                                                ]
+                                    },
+                                    "74": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317",
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336"
+                                                ],
+                                                "loose": [
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340"
+                                                ]
+                                    },
+                                    "79": {
+                                                "tight": [
+                                                            "V300",
+                                                            "V303",
+                                                            "V305",
+                                                            "V317"
+                                                ],
+                                                "comfortable": [
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1"
+                                                ],
+                                                "loose": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ]
+                                    },
+                                    "84": {
+                                                "tight": [
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1"
+                                                ],
+                                                "comfortable": [
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343"
+                                                ],
+                                                "loose": [
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349"
+                                                ]
+                                    },
+                                    "89": {
+                                                "tight": [
+                                                            "V314-1",
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326"
+                                                ],
+                                                "comfortable": [
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328"
+                                                ],
+                                                "loose": [
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ]
+                                    },
+                                    "94": {
+                                                "tight": [
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308"
+                                                ],
+                                                "comfortable": [
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349"
+                                                ],
+                                                "loose": [
+                                                            "V352",
+                                                            "V348",
+                                                            "V351",
+                                                            "V350"
+                                                ]
+                                    },
+                                    "99": {
+                                                "tight": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ],
+                                                "comfortable": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ],
+                                                "loose": [
+                                                            "V350",
+                                                            "V354",
+                                                            "V353",
+                                                            "V357"
+                                                ]
+                                    }
+                        },
+                        "sunpath": {
+                                    "69": {
+                                                "tight": [],
+                                                "comfortable": [],
+                                                "loose": [
+                                                            "Proposed",
+                                                            "RSK.5",
+                                                            "RSK-1",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "74": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "loose": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "79": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "RSK.5",
+                                                            "RSK-1",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed",
+                                                            "OJK"
+                                                ]
+                                    },
+                                    "84": {
+                                                "tight": [
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "RSK.5",
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K"
+                                                ]
+                                    },
+                                    "89": {
+                                                "tight": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "comfortable": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed",
+                                                            "OJK"
+                                                ],
+                                                "loose": [
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ]
+                                    },
+                                    "94": {
+                                                "tight": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY"
+                                                ],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "TJNK.5",
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "99": {
+                                                "tight": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "loose": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    }
+                        }
+            },
+            "petra": {
+                        "upt": {
+                                    "69": {
+                                                "tight": [
+                                                            "V304",
+                                                            "V316",
+                                                            "V335",
+                                                            "V305-1",
+                                                            "V318",
+                                                            "V314-1"
+                                                ],
+                                                "comfortable": [
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ],
+                                                "loose": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349"
+                                                ]
+                                    },
+                                    "74": {
+                                                "tight": [
+                                                            "V336",
+                                                            "V306",
+                                                            "V319",
+                                                            "V307",
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1"
+                                                ],
+                                                "comfortable": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349"
+                                                ],
+                                                "loose": [
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ]
+                                    },
+                                    "79": {
+                                                "tight": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343"
+                                                ],
+                                                "comfortable": [
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ],
+                                                "loose": [
+                                                            "V350",
+                                                            "V354",
+                                                            "V353"
+                                                ]
+                                    },
+                                    "84": {
+                                                "tight": [
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328"
+                                                ],
+                                                "comfortable": [
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351",
+                                                            "V350"
+                                                ],
+                                                "loose": [
+                                                            "V354",
+                                                            "V353",
+                                                            "V357",
+                                                            "V346",
+                                                            "V389"
+                                                ]
+                                    },
+                                    "89": {
+                                                "tight": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352"
+                                                ],
+                                                "comfortable": [
+                                                            "V348",
+                                                            "V351",
+                                                            "V350",
+                                                            "V354",
+                                                            "V353",
+                                                            "V357",
+                                                            "V346"
+                                                ],
+                                                "loose": [
+                                                            "V389",
+                                                            "V355",
+                                                            "V346-1",
+                                                            "V358",
+                                                            "V390"
+                                                ]
+                                    }
+                        },
+                        "sunpath": {
+                                    "69": {
+                                                "tight": [
+                                                            "Proposed",
+                                                            "RSK.5"
+                                                ],
+                                                "comfortable": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "74": {
+                                                "tight": [
+                                                            "RSK-1",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed",
+                                                            "OJK",
+                                                            "TJNK"
+                                                ],
+                                                "loose": [
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5",
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "79": {
+                                                "tight": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "loose": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "84": {
+                                                "tight": [
+                                                            "OJK"
+                                                ],
+                                                "comfortable": [
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5",
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "J4K"
+                                                ]
+                                    },
+                                    "89": {
+                                                "tight": [
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "comfortable": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed",
+                                                            "J4K"
+                                                ],
+                                                "loose": []
+                                    }
+                        }
+            },
+            "air": {
+                        "upt": {
+                                    "209": {
+                                                "tight": [
+                                                            "V354",
+                                                            "V353",
+                                                            "V357",
+                                                            "V346"
+                                                ],
+                                                "comfortable": [
+                                                            "V389",
+                                                            "V355",
+                                                            "V346-1",
+                                                            "V358",
+                                                            "V390",
+                                                            "V364",
+                                                            "V380",
+                                                            "V360",
+                                                            "V392"
+                                                ],
+                                                "loose": [
+                                                            "V360-1",
+                                                            "V375",
+                                                            "V364-1",
+                                                            "V382"
+                                                ]
+                                    },
+                                    "229": {
+                                                "tight": [
+                                                            "V389",
+                                                            "V355"
+                                                ],
+                                                "comfortable": [
+                                                            "V346-1",
+                                                            "V358",
+                                                            "V390",
+                                                            "V364",
+                                                            "V380",
+                                                            "V360",
+                                                            "V392",
+                                                            "V360-1",
+                                                            "V375",
+                                                            "V364-1",
+                                                            "V382"
+                                                ],
+                                                "loose": [
+                                                            "V392-2",
+                                                            "V362",
+                                                            "V360-2",
+                                                            "V378"
+                                                ]
+                                    },
+                                    "249": {
+                                                "tight": [
+                                                            "V355",
+                                                            "V346-1",
+                                                            "V358",
+                                                            "V390",
+                                                            "V364",
+                                                            "V380"
+                                                ],
+                                                "comfortable": [
+                                                            "V360",
+                                                            "V392",
+                                                            "V360-1",
+                                                            "V375",
+                                                            "V364-1",
+                                                            "V382",
+                                                            "V392-2"
+                                                ],
+                                                "loose": [
+                                                            "V362",
+                                                            "V360-2",
+                                                            "V378",
+                                                            "V361"
+                                                ]
+                                    },
+                                    "269": {
+                                                "tight": [
+                                                            "V360",
+                                                            "V392"
+                                                ],
+                                                "comfortable": [
+                                                            "V360-1",
+                                                            "V375",
+                                                            "V364-1",
+                                                            "V382",
+                                                            "V392-2",
+                                                            "V362",
+                                                            "V360-2",
+                                                            "V378",
+                                                            "V361"
+                                                ],
+                                                "loose": [
+                                                            "V360-3"
+                                                ]
+                                    }
+                        },
+                        "sunpath": {
+                                    "209": {
+                                                "tight": [
+                                                            "J4K"
+                                                ],
+                                                "comfortable": [
+                                                            "J4.5K"
+                                                ],
+                                                "loose": [
+                                                            "J5K"
+                                                ]
+                                    },
+                                    "229": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "J4.5K",
+                                                            "J5K"
+                                                ],
+                                                "loose": [
+                                                            "J6NK"
+                                                ]
+                                    },
+                                    "249": {
+                                                "tight": [
+                                                            "J4.5K"
+                                                ],
+                                                "comfortable": [
+                                                            "J5K",
+                                                            "J6NK"
+                                                ],
+                                                "loose": [
+                                                            "J7NK"
+                                                ]
+                                    },
+                                    "269": {
+                                                "tight": [],
+                                                "comfortable": [
+                                                            "J5K",
+                                                            "J6NK",
+                                                            "J7NK"
+                                                ],
+                                                "loose": [
+                                                            "J8K"
+                                                ]
+                                    }
+                        }
+            },
+            "safire3": {
+                        "upt": {
+                                    "129": {
+                                                "tight": [
+                                                            "V326",
+                                                            "V339",
+                                                            "V316-1",
+                                                            "V308",
+                                                            "V340"
+                                                ],
+                                                "comfortable": [
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352"
+                                                ],
+                                                "loose": [
+                                                            "V348",
+                                                            "V351",
+                                                            "V350",
+                                                            "V354"
+                                                ]
+                                    },
+                                    "139": {
+                                                "tight": [
+                                                            "V308",
+                                                            "V340",
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320"
+                                                ],
+                                                "comfortable": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ],
+                                                "loose": [
+                                                            "V350",
+                                                            "V354",
+                                                            "V353",
+                                                            "V357"
+                                                ]
+                                    },
+                                    "149": {
+                                                "tight": [
+                                                            "V319-1",
+                                                            "V343",
+                                                            "V320",
+                                                            "V344",
+                                                            "V328"
+                                                ],
+                                                "comfortable": [
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351",
+                                                            "V350"
+                                                ],
+                                                "loose": [
+                                                            "V354",
+                                                            "V353",
+                                                            "V357",
+                                                            "V346",
+                                                            "V389"
+                                                ]
+                                    },
+                                    "159": {
+                                                "tight": [
+                                                            "V344",
+                                                            "V328",
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349"
+                                                ],
+                                                "comfortable": [
+                                                            "V352",
+                                                            "V348",
+                                                            "V351",
+                                                            "V350",
+                                                            "V354",
+                                                            "V353"
+                                                ],
+                                                "loose": [
+                                                            "V357",
+                                                            "V346",
+                                                            "V389",
+                                                            "V355"
+                                                ]
+                                    },
+                                    "169": {
+                                                "tight": [
+                                                            "V347",
+                                                            "V309",
+                                                            "V310",
+                                                            "V349",
+                                                            "V352",
+                                                            "V348",
+                                                            "V351"
+                                                ],
+                                                "comfortable": [
+                                                            "V350",
+                                                            "V354",
+                                                            "V353",
+                                                            "V357",
+                                                            "V346"
+                                                ],
+                                                "loose": [
+                                                            "V389",
+                                                            "V355",
+                                                            "V346-1",
+                                                            "V358",
+                                                            "V390",
+                                                            "V364",
+                                                            "V380"
+                                                ]
+                                    },
+                                    "189": {
+                                                "tight": [
+                                                            "V350",
+                                                            "V354"
+                                                ],
+                                                "comfortable": [
+                                                            "V353",
+                                                            "V357",
+                                                            "V346",
+                                                            "V389",
+                                                            "V355",
+                                                            "V346-1",
+                                                            "V358",
+                                                            "V390"
+                                                ],
+                                                "loose": [
+                                                            "V364",
+                                                            "V380",
+                                                            "V360",
+                                                            "V392"
+                                                ]
+                                    }
+                        },
+                        "sunpath": {
+                                    "129": {
+                                                "tight": [
+                                                            "RSK-1",
+                                                            "Proposed",
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "loose": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "139": {
+                                                "tight": [
+                                                            "NJK",
+                                                            "DNKY",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "loose": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ]
+                                    },
+                                    "149": {
+                                                "tight": [
+                                                            "OJK"
+                                                ],
+                                                "comfortable": [
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5",
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "J4K"
+                                                ]
+                                    },
+                                    "159": {
+                                                "tight": [
+                                                            "OJK",
+                                                            "TJNK",
+                                                            "J1KS",
+                                                            "J2K"
+                                                ],
+                                                "comfortable": [
+                                                            "Proposed",
+                                                            "TJNK.5",
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ],
+                                                "loose": [
+                                                            "J4K"
+                                                ]
+                                    },
+                                    "169": {
+                                                "tight": [
+                                                            "J1KS",
+                                                            "J2K",
+                                                            "Proposed",
+                                                            "TJNK.5"
+                                                ],
+                                                "comfortable": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed",
+                                                            "J4K"
+                                                ],
+                                                "loose": [
+                                                            "J4.5K"
+                                                ]
+                                    },
+                                    "189": {
+                                                "tight": [
+                                                            "J1KL",
+                                                            "J3K",
+                                                            "Proposed"
+                                                ],
+                                                "comfortable": [
+                                                            "J4K"
+                                                ],
+                                                "loose": [
+                                                            "J4.5K"
+                                                ]
+                                    }
+                        }
             }
-        };
+};;
 
         let currentMode = 'canopy';
 
@@ -645,15 +1870,15 @@
             let hasResults = false;
             
             const data = compatibilityData[canopyType][containerBrand]?.[canopySize];
-            const brandName = containerBrand === 'upt' ? 'UPT Vector' : 'Sunpath Javelin';
+            const brandName = containerBrand === 'upt' ? 'UPT VECTOR' : 'SUNPATH JAVELIN';
             
             if (data && (data.tight.length > 0 || data.comfortable.length > 0 || data.loose.length > 0)) {
                 hasResults = true;
                 html += '<div class="fit-section">';
                 html += `<h4>${brandName}</h4>`;
                 
+                // Tight fit - no header, just items
                 if (data.tight.length > 0) {
-                    html += '<h5>Tight Fit</h5>';
                     html += '<div class="compatibility-grid">';
                     data.tight.forEach(container => {
                         html += `<div class="compatibility-item compatible-tight">${container}</div>`;
@@ -661,8 +1886,8 @@
                     html += '</div>';
                 }
                 
+                // Comfortable fit - no header, just items
                 if (data.comfortable.length > 0) {
-                    html += '<h5>Comfortable Fit</h5>';
                     html += '<div class="compatibility-grid">';
                     data.comfortable.forEach(container => {
                         html += `<div class="compatibility-item compatible-comfortable">${container}</div>`;
@@ -670,8 +1895,8 @@
                     html += '</div>';
                 }
                 
+                // Loose fit - no header, just items
                 if (data.loose.length > 0) {
-                    html += '<h5>Loose Fit</h5>';
                     html += '<div class="compatibility-grid">';
                     data.loose.forEach(container => {
                         html += `<div class="compatibility-item compatible-loose">${container}</div>`;
@@ -766,8 +1991,11 @@
             const canopyData = compatibilityData[canopyType][containerType];
             
             const canopyNames = {
-                'helium': 'Helium',
-                'kraken_low_bulk': 'Kraken Low Bulk'
+                'air': 'Air',
+                'jfx2': 'JFX2',
+                'leia': 'Leia',
+                'petra': 'Petra',
+                'safire3': 'Safire 3'
             };
             const canopyDisplayName = canopyNames[canopyType] || canopyType;
             
@@ -794,7 +2022,6 @@
                 html += `<h4>${canopyDisplayName} sizes compatible with ${containerName} ${containerSize}:</h4>`;
                 
                 if (tightSizes.length > 0) {
-                    html += '<h5>Tight Fit</h5>';
                     html += '<div class="compatibility-grid">';
                     tightSizes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
                         html += `<div class="compatibility-item compatible-tight">${size}</div>`;
@@ -803,7 +2030,6 @@
                 }
                 
                 if (comfortableSizes.length > 0) {
-                    html += '<h5>Comfortable Fit</h5>';
                     html += '<div class="compatibility-grid">';
                     comfortableSizes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
                         html += `<div class="compatibility-item compatible-comfortable">${size}</div>`;
@@ -812,7 +2038,6 @@
                 }
                 
                 if (looseSizes.length > 0) {
-                    html += '<h5>Loose Fit</h5>';
                     html += '<div class="compatibility-grid">';
                     looseSizes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(size => {
                         html += `<div class="compatibility-item compatible-loose">${size}</div>`;
