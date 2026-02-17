@@ -32,10 +32,16 @@ window.compatibilityData = (function () {
 
   const CANOPY_SIZES = {
   "crossfire3": generateSizes(89, 159, 10),
-  "jfx2": generateSizes(69, 119, 1),
-  "leia": generateSizes(60, 100, 1),
-  "petra": generateSizes(55, 90, 1),
+  "jfx2": generateSizes(69, 119, 4),
+  "leia": generateSizes(60, 100, 4),
+  "petra": generateSizes(55, 90, 4),
   "safire4": generateSizes(109, 189, 10)
+};
+
+  const CANOPY_ONLY_SIZES = {
+  "helium": generateSizes(129, 229, 10),
+  "kraken-lb": generateSizes(119, 189, 10),
+  "kraken-zp": generateSizes(119, 189, 10)
 };
 
   const IDEAL_C3_BY_CONTAINER = {
@@ -269,6 +275,22 @@ window.compatibilityData = (function () {
           });
 
           data[canopyType][brand][String(sizeValue)] = buckets;
+        });
+      });
+    });
+
+    Object.keys(CANOPY_ONLY_SIZES).forEach((canopyType) => {
+      const sizes = CANOPY_ONLY_SIZES[canopyType] || [];
+      data[canopyType] = {};
+
+      Object.keys(IDEAL_C3_BY_CONTAINER).forEach((brand) => {
+        data[canopyType][brand] = {};
+        sizes.forEach((size) => {
+          data[canopyType][brand][String(size)] = {
+            tight: [],
+            comfortable: [],
+            loose: []
+          };
         });
       });
     });
